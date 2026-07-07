@@ -1,0 +1,83 @@
+:root {
+  --color-dark: #16342C;
+  --color-gold: #E8A93D;
+  --color-rust: #B44E2E;
+  --color-bg: #FBF8F2;
+  --color-bg-alt: #F1E8D6;
+  --color-text: #1E2622;
+  --color-text-soft: #4B5750;
+  --color-line: rgba(22, 52, 44, 0.14);
+}
+
+* { box-sizing: border-box; }
+body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--color-bg); color: var(--color-text); }
+
+/* ---------- Login ---------- */
+.login-body { display: flex; align-items: center; justify-content: center; min-height: 100vh; background: var(--color-dark); }
+.login-card { background: #fff; padding: 40px; border-radius: 14px; width: 340px; box-shadow: 0 20px 40px rgba(0,0,0,0.3); }
+.login-card h1 { margin: 0 0 4px; font-size: 1.4rem; color: var(--color-dark); }
+.login-sub { color: var(--color-text-soft); font-size: 0.85rem; margin-bottom: 24px; }
+.login-card label { display: block; font-size: 0.8rem; font-weight: 600; margin: 14px 0 6px; }
+.login-card input { width: 100%; padding: 10px 12px; border: 1px solid var(--color-line); border-radius: 8px; }
+.login-card button { width: 100%; margin-top: 20px; padding: 12px; background: var(--color-rust); color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+.login-error { color: var(--color-rust); font-size: 0.85rem; margin-top: 12px; min-height: 18px; }
+
+/* ---------- Header ---------- */
+.admin-header { display: flex; justify-content: space-between; align-items: center; background: var(--color-dark); color: #fff; padding: 16px 28px; }
+.admin-logo strong { color: var(--color-gold); }
+.admin-header-right { display: flex; align-items: center; gap: 16px; font-size: 0.9rem; }
+.btn-logout { background: none; border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 8px 16px; border-radius: 999px; cursor: pointer; }
+.btn-logout:hover { background: var(--color-rust); border-color: var(--color-rust); }
+
+.admin-main { max-width: 1200px; margin: 0 auto; padding: 28px; }
+
+/* ---------- Stat cards ---------- */
+.stat-cards { display: grid; grid-template-columns: repeat(5, 1fr); gap: 16px; margin-bottom: 28px; }
+.stat-card { background: #fff; border: 1px solid var(--color-line); border-radius: 12px; padding: 18px; }
+.stat-label { display: block; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--color-text-soft); margin-bottom: 8px; }
+.stat-value { font-size: 1.4rem; font-weight: 700; color: var(--color-dark); }
+
+/* ---------- Charts ---------- */
+.charts-row { display: grid; grid-template-columns: 1.4fr 1fr; gap: 20px; margin-bottom: 28px; }
+.chart-box { background: #fff; border: 1px solid var(--color-line); border-radius: 12px; padding: 20px; }
+.chart-box h3 { margin: 0 0 16px; font-size: 1rem; }
+
+/* ---------- Panels ---------- */
+.panel { background: #fff; border: 1px solid var(--color-line); border-radius: 12px; padding: 22px; margin-bottom: 24px; }
+.panel h3 { margin-top: 0; }
+.panel-header { display: flex; justify-content: space-between; align-items: center; }
+
+.manual-form { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; margin-top: 14px; }
+.manual-form input, .manual-form select { padding: 10px 12px; border: 1px solid var(--color-line); border-radius: 8px; }
+.manual-form button { grid-column: span 3; padding: 12px; background: var(--color-dark); color: #fff; border: none; border-radius: 8px; font-weight: 600; cursor: pointer; }
+
+.btn-export { background: var(--color-gold); border: none; padding: 10px 18px; border-radius: 999px; font-weight: 700; cursor: pointer; }
+
+/* ---------- Filters ---------- */
+.filters { display: flex; flex-wrap: wrap; gap: 10px; margin: 18px 0; }
+.filters input, .filters select { padding: 9px 12px; border: 1px solid var(--color-line); border-radius: 8px; }
+.filters button { padding: 9px 16px; border-radius: 8px; border: none; cursor: pointer; }
+#filter-btn { background: var(--color-rust); color: #fff; }
+.btn-clear { background: var(--color-bg-alt); }
+
+/* ---------- Table ---------- */
+.table-wrap { overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 0.9rem; }
+th, td { text-align: left; padding: 10px 12px; border-bottom: 1px solid var(--color-line); white-space: nowrap; }
+th { font-size: 0.75rem; text-transform: uppercase; color: var(--color-text-soft); }
+.badge { padding: 3px 10px; border-radius: 999px; font-size: 0.75rem; font-weight: 600; }
+.badge-successful { background: #DCF3E4; color: #1E7A42; }
+.badge-pending { background: #FFF3D6; color: #966400; }
+.badge-failed { background: #FBE0DA; color: var(--color-rust); }
+.row-delete { background: none; border: none; color: var(--color-rust); cursor: pointer; font-size: 0.85rem; }
+
+.pagination { display: flex; gap: 8px; margin-top: 16px; flex-wrap: wrap; }
+.pagination button { padding: 6px 12px; border: 1px solid var(--color-line); background: #fff; border-radius: 6px; cursor: pointer; }
+.pagination button.active { background: var(--color-dark); color: #fff; }
+
+@media (max-width: 900px) {
+  .stat-cards { grid-template-columns: repeat(2, 1fr); }
+  .charts-row { grid-template-columns: 1fr; }
+  .manual-form { grid-template-columns: 1fr 1fr; }
+  .manual-form button { grid-column: span 2; }
+}

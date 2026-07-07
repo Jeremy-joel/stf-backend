@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin Login | Save the Family Foundation</title>
+<link rel="stylesheet" href="admin.css">
+</head>
+<body class="login-body">
+  <form class="login-card" id="login-form">
+    <h1>Admin Login</h1>
+    <p class="login-sub">Save the Family Foundation — Donations Dashboard</p>
+
+    <label for="username">Username</label>
+    <input type="text" id="username" required autofocus>
+
+    <label for="password">Password</label>
+    <input type="password" id="password" required>
+
+    <button type="submit">Log In</button>
+    <p class="login-error" id="login-error"></p>
+  </form>
+
+  <script>
+    document.getElementById('login-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const username = document.getElementById('username').value.trim();
+      const password = document.getElementById('password').value;
+      const errorEl = document.getElementById('login-error');
+      errorEl.textContent = '';
+
+      try {
+        const res = await fetch('/api/admin/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ username, password })
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+          errorEl.textContent = data.message || 'Login failed.';
+          return;
+        }
+
+        localStorage.setItem('sff_admin_token', data.token);
+        localStorage.setItem('sff_admin_username', data.username);
+        window.location.href = 'dashboard.html';
+      } catch (err) {
+        errorEl.textContent = 'Could not reach the server. Try again.';
+      }
+    });
+  </script>
+</body>
+</html>
