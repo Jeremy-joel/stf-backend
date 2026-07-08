@@ -1,28 +1,38 @@
 const bcrypt = require('bcryptjs');
 const Admin = require('../models/Admin');
 
-// Runs every time the server starts. If the admin account from .env
-// doesn't exist yet in the database, it creates it automatically.
-// This means we never need Shell/SSH access to run a seed script manually -
-// useful on free hosting tiers (like Render's free plan) that don't include Shell.
+// Runs every time the server starts. It keeps a single admin account
+// ALWAYS in sync with whatever ADMIN_USERNAME / ADMIN_PASSWORD currently
+// are in your .env (or Render's Environment tab).
+//
+// This means:
+// - If the account doesn't exist yet, it gets created.
+// - If it already exists, its password (and username) gets updated to
+//   match your current .env every time the server restarts.
+// - You never need Shell/SSH access to fix a stale admin account -
+//   just change the env vars and let the server restart.
 const ensureAdminExists = async () => {
   try {
     const { ADMIN_USERNAME, ADMIN_PASSWORD } = process.env;
 
     if (!ADMIN_USERNAME || !ADMIN_PASSWORD) {
-      console.warn('ADMIN_USERNAME / ADMIN_PASSWORD not set - skipping admin auto-create.');
-      return;
-    }
-
-    const existing = await Admin.findOne({ username: ADMIN_USERNAME });
-    if (existing) {
-      console.log(`Admin "${ADMIN_USERNAME}" already exists.`);
+      console.warn('ADMIN_USERNAME / ADMIN_PASSWORD not set - skipping admin sync.');
       return;
     }
 
     const passwordHash = await bcrypt.hash(ADMIN_PASSWORD, 10);
-    await Admin.create({ username: ADMIN_USERNAME, passwordHash });
-    console.log(`Admin account "${ADMIN_USERNAME}" auto-created on startup.`);
+
+    // Remove any other admin accounts left over from earlier attempts,
+    // so there's only ever ONE admin account, matching current .env
+    await Admin.deleteMany({ username: { $ne: ADMIN_USERNAME } });
+
+    await Admin.findOneAndUpdate(
+      { username: ADMIN_USERNAME },
+      { username: ADMIN_USERNAME, passwordHash },
+      { upsert: true, new: true }
+    );
+
+    console.log(`Admin "${ADMIN_USERNAME}" is created/synced and ready to log in.`);
   } catch (err) {
     console.error('ensureAdminExists error:', err.message);
   }
