@@ -24,11 +24,14 @@ Download and install from https://nodejs.org (choose the LTS version). This lets
 3. Go to **Settings → API Keys**. Copy your **Public Key** and **Secret Key** (start in **Test Mode** first — there's a toggle — so you can try everything without real money).
 4. Go to **Settings → Webhooks**. Set the URL to `https://YOUR-RENDER-URL/api/donations/webhook` (you'll fill this in after deploying in Step 5). Set a "Secret Hash" — make up any random string and save it, you'll need it below.
 
+<<<<<<< HEAD
 ### 3b. Create a free Cloudinary account (for Gallery/Program/Impact photo uploads)
 Render's free tier wipes any files saved directly to its disk every time the server restarts — so photos uploaded through the admin panel are stored on Cloudinary instead, which keeps them permanently and gives back a URL.
 1. Go to https://cloudinary.com/users/register/free and sign up (free tier is generous - 25GB storage).
 2. On your Cloudinary Dashboard homepage, copy your **Cloud Name**, **API Key**, and **API Secret**.
 
+=======
+>>>>>>> 497b9f89e2c8b50f389907668775ef4f447b0cc9
 ### 4. Configure your environment variables
 1. In this project folder, copy `.env.example` to a new file named `.env`.
 2. Fill in:
@@ -38,7 +41,10 @@ Render's free tier wipes any files saved directly to its disk every time the ser
    - `FLW_SECRET_HASH` — the random string you set in Flutterwave's webhook settings
    - `FRONTEND_URL` — the URL where your main website is hosted
    - `ADMIN_USERNAME` / `ADMIN_PASSWORD` — your own login for the dashboard (change the password to something strong)
+<<<<<<< HEAD
    - `CLOUDINARY_CLOUD_NAME` / `CLOUDINARY_API_KEY` / `CLOUDINARY_API_SECRET` — from your Cloudinary Dashboard
+=======
+>>>>>>> 497b9f89e2c8b50f389907668775ef4f447b0cc9
 
 ### 5. Run it locally first (to test)
 ```
@@ -66,6 +72,7 @@ Follow `FRONTEND-INTEGRATION.md` in this folder — it shows exactly what to pas
 ---
 
 ## What admins can do
+<<<<<<< HEAD
 Log in at `/admin/login.html` — the top navigation bar links to all sections:
 
 **Donations** (`dashboard.html`)
@@ -85,6 +92,15 @@ Log in at `/admin/login.html` — the top navigation bar links to all sections:
 
 **Messages** (`messages.html`)
 - Every contact form submission from your website, with unread count, mark-as-read, reply-by-email, and delete
+=======
+- Log in at `/admin/login.html` (only people with the username/password you set)
+- See total raised, donation count, and totals broken down by M-Pesa / Card / Bank Transfer
+- See a 6-month bar chart and a payment-method pie chart
+- Manually log a donation (e.g. someone reports a bank transfer by phone/email)
+- Search and filter all donations by name, status, method, or date range
+- Delete incorrect entries
+- Export everything to a CSV file that opens directly in Excel
+>>>>>>> 497b9f89e2c8b50f389907668775ef4f447b0cc9
 
 ## Folder structure
 ```

@@ -38,4 +38,8 @@ const ensureAdminExists = async () => {
   }
 };
 
+<<<<<<< HEAD
 module.exports = ensureAdminExists;
+=======
+module.exports = ensureAdminExists;
+>>>>>>> 497b9f89e2c8b50f389907668775ef4f447b0cc9

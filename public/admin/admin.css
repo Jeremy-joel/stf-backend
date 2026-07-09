@@ -26,6 +26,7 @@ body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--
 .admin-header { display: flex; justify-content: space-between; align-items: center; background: var(--color-dark); color: #fff; padding: 16px 28px; }
 .admin-logo strong { color: var(--color-gold); }
 .admin-header-right { display: flex; align-items: center; gap: 16px; font-size: 0.9rem; }
+<<<<<<< HEAD
 
 .admin-nav-links { display: flex; gap: 4px; flex-wrap: wrap; }
 .admin-nav-links a {
@@ -71,6 +72,8 @@ body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background: var(--
 .msg-date { font-size: 0.78rem; color: var(--color-text-soft); }
 .msg-contact { font-size: 0.82rem; color: var(--color-text-soft); margin: 2px 0 8px; }
 .msg-body { font-size: 0.92rem; margin-bottom: 10px; white-space: pre-wrap; }
+=======
+>>>>>>> 497b9f89e2c8b50f389907668775ef4f447b0cc9
 .btn-logout { background: none; border: 1px solid rgba(255,255,255,0.3); color: #fff; padding: 8px 16px; border-radius: 999px; cursor: pointer; }
 .btn-logout:hover { background: var(--color-rust); border-color: var(--color-rust); }
 
