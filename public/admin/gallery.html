@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gallery | Save the Family Foundation Admin</title>
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<header class="admin-header">
+  <span class="admin-logo">Save the Family Foundation <strong>Admin</strong></span>
+  <nav class="admin-nav-links">
+    <a href="dashboard.html">Donations</a>
+    <a href="programs.html">Programs</a>
+    <a href="gallery.html" class="active">Gallery</a>
+    <a href="impact.html">Impact</a>
+    <a href="messages.html">Messages</a>
+  </nav>
+  <div class="admin-header-right">
+    <span id="admin-username"></span>
+    <button id="logout-btn" class="btn-logout">Log Out</button>
+  </div>
+</header>
+
+<main class="admin-main">
+
+  <section class="panel">
+    <h3>Upload a New Photo</h3>
+    <form id="gallery-form" class="manual-form" enctype="multipart/form-data">
+      <input type="file" id="g-image" accept="image/*" required>
+      <input type="text" id="g-caption" placeholder="Caption (optional)">
+      <select id="g-published">
+        <option value="true">Published</option>
+        <option value="false">Hidden</option>
+      </select>
+      <button type="submit">Upload Photo</button>
+    </form>
+  </section>
+
+  <section class="panel">
+    <h3>Gallery Photos</h3>
+    <p style="color:var(--color-text-soft); font-size:0.85rem;">These populate the "Moments of Hope" gallery on your live website.</p>
+    <div class="card-grid" id="gallery-grid"></div>
+  </section>
+
+</main>
+
+<script src="admin-common.js"></script>
+<script src="gallery.js"></script>
+</body>
+</html>

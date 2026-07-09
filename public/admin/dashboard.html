@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Donations Dashboard | Save the Family Foundation</title>
+<link rel="stylesheet" href="admin.css">
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4"></script>
+</head>
+<body>
+
+<header class="admin-header">
+  <span class="admin-logo">Save the Family Foundation <strong>Admin</strong></span>
+  <nav class="admin-nav-links">
+    <a href="dashboard.html" class="active">Donations</a>
+    <a href="programs.html">Programs</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="impact.html">Impact</a>
+    <a href="messages.html">Messages</a>
+  </nav>
+  <div class="admin-header-right">
+    <span id="admin-username"></span>
+    <button id="logout-btn" class="btn-logout">Log Out</button>
+  </div>
+</header>
+
+<main class="admin-main">
+
+  <!-- Summary cards -->
+  <section class="stat-cards">
+    <div class="stat-card">
+      <span class="stat-label">Total Raised</span>
+      <span class="stat-value" id="stat-total">KES 0</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">Successful Donations</span>
+      <span class="stat-value" id="stat-count">0</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">M-Pesa</span>
+      <span class="stat-value" id="stat-mpesa">KES 0</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">Card</span>
+      <span class="stat-value" id="stat-card">KES 0</span>
+    </div>
+    <div class="stat-card">
+      <span class="stat-label">Bank Transfer (logged)</span>
+      <span class="stat-value" id="stat-bank">KES 0</span>
+    </div>
+  </section>
+
+  <!-- Charts -->
+  <section class="charts-row">
+    <div class="chart-box">
+      <h3>Donations — Last 6 Months</h3>
+      <canvas id="monthChart"></canvas>
+    </div>
+    <div class="chart-box">
+      <h3>By Payment Method</h3>
+      <canvas id="methodChart"></canvas>
+    </div>
+  </section>
+
+  <!-- Add manual donation -->
+  <section class="panel">
+    <h3>Log a Donation Manually (e.g. reported bank transfer)</h3>
+    <form id="manual-form" class="manual-form">
+      <input type="text" id="m-name" placeholder="Donor name" required>
+      <input type="email" id="m-email" placeholder="Email (optional)">
+      <input type="text" id="m-phone" placeholder="Phone (optional)">
+      <input type="number" id="m-amount" placeholder="Amount (KES)" required min="1">
+      <select id="m-method" required>
+        <option value="bank_transfer">Bank Transfer</option>
+        <option value="mpesa">M-Pesa (manual)</option>
+        <option value="card">Card (manual)</option>
+        <option value="other">Other</option>
+      </select>
+      <input type="text" id="m-notes" placeholder="Notes (optional)">
+      <button type="submit">Add Donation</button>
+    </form>
+  </section>
+
+  <!-- Filters + table -->
+  <section class="panel">
+    <div class="panel-header">
+      <h3>All Donations</h3>
+      <button id="export-btn" class="btn-export">Export CSV / Excel</button>
+    </div>
+
+    <div class="filters">
+      <input type="text" id="f-search" placeholder="Search name, email, phone...">
+      <select id="f-status">
+        <option value="">All statuses</option>
+        <option value="successful">Successful</option>
+        <option value="pending">Pending</option>
+        <option value="failed">Failed</option>
+      </select>
+      <select id="f-method">
+        <option value="">All methods</option>
+        <option value="mpesa">M-Pesa</option>
+        <option value="card">Card</option>
+        <option value="bank_transfer">Bank Transfer</option>
+        <option value="other">Other</option>
+      </select>
+      <input type="date" id="f-from">
+      <input type="date" id="f-to">
+      <button id="filter-btn">Filter</button>
+      <button id="clear-btn" class="btn-clear">Clear</button>
+    </div>
+
+    <div class="table-wrap">
+      <table>
+        <thead>
+          <tr>
+            <th>Date</th><th>Donor</th><th>Contact</th><th>Amount</th><th>Method</th><th>Status</th><th></th>
+          </tr>
+        </thead>
+        <tbody id="donations-tbody"></tbody>
+      </table>
+    </div>
+
+    <div class="pagination" id="pagination"></div>
+  </section>
+
+</main>
+
+<script src="admin.js"></script>
+</body>
+</html>

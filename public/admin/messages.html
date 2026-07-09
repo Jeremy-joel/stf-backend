@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Messages | Save the Family Foundation Admin</title>
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<header class="admin-header">
+  <span class="admin-logo">Save the Family Foundation <strong>Admin</strong></span>
+  <nav class="admin-nav-links">
+    <a href="dashboard.html">Donations</a>
+    <a href="programs.html">Programs</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="impact.html">Impact</a>
+    <a href="messages.html" class="active">Messages <span class="badge-count" id="unread-count" style="display:none;"></span></a>
+  </nav>
+  <div class="admin-header-right">
+    <span id="admin-username"></span>
+    <button id="logout-btn" class="btn-logout">Log Out</button>
+  </div>
+</header>
+
+<main class="admin-main">
+
+  <section class="panel">
+    <div class="panel-header">
+      <h3>Contact Form Submissions</h3>
+      <select id="filter-read">
+        <option value="">All messages</option>
+        <option value="false">Unread only</option>
+        <option value="true">Read only</option>
+      </select>
+    </div>
+    <div id="messages-list"></div>
+    <div class="pagination" id="pagination"></div>
+  </section>
+
+</main>
+
+<script src="admin-common.js"></script>
+<script src="messages.js"></script>
+</body>
+</html>

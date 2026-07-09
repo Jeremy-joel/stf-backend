@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Programs | Save the Family Foundation Admin</title>
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<header class="admin-header">
+  <span class="admin-logo">Save the Family Foundation <strong>Admin</strong></span>
+  <nav class="admin-nav-links">
+    <a href="dashboard.html">Donations</a>
+    <a href="programs.html" class="active">Programs</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="impact.html">Impact</a>
+    <a href="messages.html">Messages</a>
+  </nav>
+  <div class="admin-header-right">
+    <span id="admin-username"></span>
+    <button id="logout-btn" class="btn-logout">Log Out</button>
+  </div>
+</header>
+
+<main class="admin-main">
+
+  <section class="panel">
+    <h3 id="form-title">Add a New Program</h3>
+    <form id="program-form" class="manual-form" enctype="multipart/form-data">
+      <input type="hidden" id="p-id">
+      <input type="text" id="p-title" placeholder="Program title" required>
+      <input type="number" id="p-order" placeholder="Display order (0 = first)" value="0">
+      <select id="p-published">
+        <option value="true">Published (visible on website)</option>
+        <option value="false">Hidden (draft)</option>
+      </select>
+      <textarea id="p-description" placeholder="Program description" required style="grid-column: span 3; padding:10px 12px; border:1px solid var(--color-line); border-radius:8px;"></textarea>
+      <div class="image-upload-row" style="grid-column: span 3;">
+        <input type="file" id="p-image" accept="image/*">
+        <img id="p-preview" class="image-preview" style="display:none;">
+      </div>
+      <button type="submit" id="p-submit-btn">Add Program</button>
+    </form>
+    <button id="p-cancel-edit" style="display:none; margin-top:10px; background:none; border:none; color:var(--color-rust); cursor:pointer;">Cancel editing</button>
+  </section>
+
+  <section class="panel">
+    <h3>All Programs</h3>
+    <p style="color:var(--color-text-soft); font-size:0.85rem;">These are the program cards shown on your live website. Hidden ones won't appear on the site.</p>
+    <div class="card-grid" id="programs-grid"></div>
+  </section>
+
+</main>
+
+<script src="admin-common.js"></script>
+<script src="programs.js"></script>
+</body>
+</html>

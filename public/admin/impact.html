@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Impact | Save the Family Foundation Admin</title>
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<header class="admin-header">
+  <span class="admin-logo">Save the Family Foundation <strong>Admin</strong></span>
+  <nav class="admin-nav-links">
+    <a href="dashboard.html">Donations</a>
+    <a href="programs.html">Programs</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="impact.html" class="active">Impact</a>
+    <a href="messages.html">Messages</a>
+  </nav>
+  <div class="admin-header-right">
+    <span id="admin-username"></span>
+    <button id="logout-btn" class="btn-logout">Log Out</button>
+  </div>
+</header>
+
+<main class="admin-main">
+
+  <section class="panel">
+    <h3 id="form-title">Add an Impact Card</h3>
+    <p style="color:var(--color-text-soft); font-size:0.85rem;">These are the 4 photo cards in your "Our Impact" section (e.g. "Children Supported", "Families Empowered").</p>
+    <form id="impact-form" class="manual-form" enctype="multipart/form-data">
+      <input type="hidden" id="i-id">
+      <input type="text" id="i-label" placeholder="Label (e.g. Children Supported)" required>
+      <input type="number" id="i-order" placeholder="Display order (0 = first)" value="0">
+      <select id="i-published">
+        <option value="true">Published</option>
+        <option value="false">Hidden</option>
+      </select>
+      <div class="image-upload-row" style="grid-column: span 3;">
+        <input type="file" id="i-image" accept="image/*">
+        <img id="i-preview" class="image-preview" style="display:none;">
+      </div>
+      <button type="submit" id="i-submit-btn">Add Impact Card</button>
+    </form>
+    <button id="i-cancel-edit" style="display:none; margin-top:10px; background:none; border:none; color:var(--color-rust); cursor:pointer;">Cancel editing</button>
+  </section>
+
+  <section class="panel">
+    <h3>All Impact Cards</h3>
+    <div class="card-grid" id="impact-grid"></div>
+  </section>
+
+</main>
+
+<script src="admin-common.js"></script>
+<script src="impact.js"></script>
+</body>
+</html>
