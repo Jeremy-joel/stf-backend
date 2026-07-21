@@ -4,7 +4,7 @@ const Donation = require('../models/Donation');
 
 /**
  * STEP 1 (frontend calls this first)
- * Generates a unique transaction reference before opening the Flutterwave
+ * Generates a unique transaction reference before opening the Paystack
  * payment popup, and saves a "pending" donation record.
  */
 const initiateDonation = async (req, res) => {
@@ -30,7 +30,7 @@ const initiateDonation = async (req, res) => {
     res.status(201).json({
       message: 'Donation initiated',
       txRef: donation.txRef,
-      publicKey: process.env.FLW_PUBLIC_KEY
+      publicKey: process.env.PAYSTACK_PUBLIC_KEY
     });
   } catch (err) {
     console.error('initiateDonation error:', err.message);
@@ -39,21 +39,21 @@ const initiateDonation = async (req, res) => {
 };
 
 /**
- * STEP 2 (frontend calls this after the Flutterwave popup reports success)
- * NEVER trust the frontend alone - we re-check directly with Flutterwave's
+ * STEP 2 (frontend calls this after the Paystack popup reports success)
+ * NEVER trust the frontend alone - we re-check directly with Paystack's
  * servers using our secret key before marking a donation as successful.
  */
 const verifyDonation = async (req, res) => {
   try {
-    const { transactionId, txRef } = req.body;
+    const { txRef } = req.body;
 
-    if (!transactionId || !txRef) {
-      return res.status(400).json({ message: 'Missing transaction details.' });
+    if (!txRef) {
+      return res.status(400).json({ message: 'Missing transaction reference.' });
     }
 
     const verifyRes = await axios.get(
-      `https://api.flutterwave.com/v3/transactions/${transactionId}/verify`,
-      { headers: { Authorization: `Bearer ${process.env.FLW_SECRET_KEY}` } }
+      `https://api.paystack.co/transaction/verify/${encodeURIComponent(txRef)}`,
+      { headers: { Authorization: `Bearer ${process.env.PAYSTACK_SECRET_KEY}` } }
     );
 
     const data = verifyRes.data.data;
@@ -63,13 +63,14 @@ const verifyDonation = async (req, res) => {
       return res.status(404).json({ message: 'Donation record not found.' });
     }
 
+    // Paystack amounts are in the smallest currency unit (KES cents), hence * 100
     const isGenuine =
-      data.status === 'successful' &&
-      data.tx_ref === txRef &&
-      data.amount >= donation.amount &&
+      data.status === 'success' &&
+      data.reference === txRef &&
+      data.amount >= donation.amount * 100 &&
       data.currency === 'KES';
 
-    donation.flwTransactionId = String(transactionId);
+    donation.flwTransactionId = String(data.id); // Paystack's transaction id
     donation.status = isGenuine ? 'successful' : 'failed';
     await donation.save();
 
@@ -85,26 +86,32 @@ const verifyDonation = async (req, res) => {
 };
 
 /**
- * WEBHOOK (Flutterwave calls this directly from their servers)
- * This is a safety net in case the donor closes their browser right after
- * paying, before step 2 above gets a chance to run.
- * Set this URL in your Flutterwave Dashboard -> Settings -> Webhooks:
+ * WEBHOOK (Paystack calls this directly from their servers)
+ * Safety net in case the donor closes their browser right after paying,
+ * before step 2 above gets a chance to run.
+ * Set this URL in Paystack Dashboard -> Settings -> API Keys & Webhooks:
  *   https://YOUR-BACKEND-URL/api/donations/webhook
  */
-const flutterwaveWebhook = async (req, res) => {
+const paystackWebhook = async (req, res) => {
   try {
-    const signature = req.headers['verif-hash'];
-    if (!signature || signature !== process.env.FLW_SECRET_HASH) {
-      return res.status(401).end(); // reject anything not genuinely from Flutterwave
+    // Paystack signs the exact raw request body - req.rawBody is captured in server.js
+    const expectedSignature = crypto
+      .createHmac('sha512', process.env.PAYSTACK_SECRET_KEY)
+      .update(req.rawBody)
+      .digest('hex');
+
+    if (expectedSignature !== req.headers['x-paystack-signature']) {
+      return res.status(401).end(); // reject anything not genuinely from Paystack
     }
 
-    const payload = req.body;
+    const event = req.body;
 
-    if (payload.status === 'successful') {
-      const donation = await Donation.findOne({ txRef: payload.txRef || payload.tx_ref });
+    if (event.event === 'charge.success') {
+      const txRef = event.data.reference;
+      const donation = await Donation.findOne({ txRef });
       if (donation && donation.status !== 'successful') {
         donation.status = 'successful';
-        donation.flwTransactionId = String(payload.id || payload.transaction_id);
+        donation.flwTransactionId = String(event.data.id);
         await donation.save();
       }
     }
@@ -112,8 +119,8 @@ const flutterwaveWebhook = async (req, res) => {
     res.status(200).end();
   } catch (err) {
     console.error('Webhook error:', err.message);
-    res.status(200).end(); // still acknowledge receipt so Flutterwave doesn't keep retrying
+    res.status(200).end(); // still acknowledge receipt so Paystack doesn't keep retrying
   }
 };
 
-module.exports = { initiateDonation, verifyDonation, flutterwaveWebhook };
+module.exports = { initiateDonation, verifyDonation, paystackWebhook };

@@ -13,13 +13,21 @@ const galleryRoutes = require('./routes/galleryRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 
 const app = express();
+
 const start = async () => {
   await connectDB();
-  await ensureAdminExists();
+  await ensureAdminExists(); // creates/syncs your admin login automatically
 
   app.use(cors({ origin: process.env.FRONTEND_URL || '*' }));
-  app.use(express.json());
 
+  // The "verify" option captures the exact raw bytes of every request body
+  // into req.rawBody - Paystack's webhook signature check needs this exact
+  // raw form, not the parsed JSON object, to verify a webhook is genuine.
+  app.use(express.json({
+    verify: (req, res, buf) => { req.rawBody = buf; }
+  }));
+
+  // API routes
   app.use('/api/donations', donationRoutes);
   app.use('/api/admin', adminRoutes);
   app.use('/api/programs', programRoutes);
@@ -27,6 +35,7 @@ const start = async () => {
   app.use('/api/gallery', galleryRoutes);
   app.use('/api/contact', contactRoutes);
 
+  // Serves the admin dashboard as plain static files
   app.use('/admin', express.static(path.join(__dirname, 'public/admin')));
 
   app.get('/', (req, res) => {
@@ -34,8 +43,7 @@ const start = async () => {
   });
 
   const PORT = process.env.PORT || 5000;
-  app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
-  });
+  app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
 };
+
 start();

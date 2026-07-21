@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Paystack Standalone Test — Save the Family Foundation</title>
+<script src="https://js.paystack.co/v1/inline.js"></script>
+<style>
+  body { font-family: Arial, sans-serif; max-width: 480px; margin: 60px auto; padding: 0 20px; }
+  h1 { font-size: 1.3rem; }
+  button { padding: 14px 24px; background: #B44E2E; color: #fff; border: none; border-radius: 8px; font-size: 1rem; cursor: pointer; margin-top: 20px; }
+  .note { background: #F1E8D6; padding: 14px; border-radius: 8px; font-size: 0.9rem; margin-top: 20px; }
+</style>
+</head>
+<body>
+
+<h1>Paystack Test — Save the Family Foundation</h1>
+<p>Paste your PAYSTACK TEST public key below, then click Pay to confirm your account works, with no backend involved.</p>
+<p><strong>Public key:</strong> <input type="text" id="pk" placeholder="pk_test_..." style="width:100%; padding:8px;"></p>
+
+<button onclick="testPayment()">Pay KES 100 (Test)</button>
+
+<div class="note">
+  <strong>Test card:</strong> 4084 0840 8408 4081 &nbsp; CVV: 408 &nbsp; Expiry: any future date &nbsp; PIN: 0000 &nbsp; OTP: 123456<br><br>
+  Paystack's popup will also show an M-Pesa option automatically for KES currency - it simulates a successful mobile money prompt in test mode.
+</div>
+
+<script>
+  function testPayment() {
+    const key = document.getElementById('pk').value.trim();
+    if (!key) { alert('Paste your Paystack TEST public key first.'); return; }
+
+    const handler = PaystackPop.setup({
+      key: key,
+      email: 'testdonor@example.com',
+      amount: 10000, // KES 100 in cents
+      currency: 'KES',
+      ref: 'TEST-' + Date.now(),
+      callback: function (response) {
+        alert('Payment successful! Reference: ' + response.reference);
+        console.log('Paystack response:', response);
+      },
+      onClose: function () {
+        console.log('Checkout closed');
+      }
+    });
+
+    handler.openIframe();
+  }
+</script>
+
+</body>
+</html>
