@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Page Content | Save the Family Foundation Admin</title>
+<link rel="stylesheet" href="admin.css">
+<style>
+  .content-form { display: flex; flex-direction: column; gap: 16px; margin-top: 16px; }
+  .content-form label { font-family: var(--font-mono, monospace); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--color-text-soft); margin-bottom: 4px; display: block; }
+  .content-form input, .content-form textarea { width: 100%; padding: 10px 12px; border: 1px solid var(--color-line); border-radius: 8px; font-family: inherit; }
+  .content-form textarea { resize: vertical; }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .save-msg { font-size: 0.85rem; margin-top: 10px; }
+  .save-msg.ok { color: #1E7A42; }
+  .save-msg.err { color: var(--color-rust); }
+</style>
+</head>
+<body>
+
+<header class="admin-header">
+  <span class="admin-logo">Save the Family Foundation <strong>Admin</strong></span>
+  <nav class="admin-nav-links">
+    <a href="dashboard.html">Donations</a>
+    <a href="programs.html">Programs</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="impact.html">Impact</a>
+    <a href="content.html" class="active">Page Content</a>
+    <a href="messages.html">Messages</a>
+  </nav>
+  <div class="admin-header-right">
+    <span id="admin-username"></span>
+    <button id="logout-btn" class="btn-logout">Log Out</button>
+  </div>
+</header>
+
+<main class="admin-main">
+
+  <section class="panel">
+    <h3>Who We Are</h3>
+    <p style="color:var(--color-text-soft); font-size:0.85rem;">The intro paragraph, the 4 focus pillars, and the "Transforming Lives" text on your homepage.</p>
+    <form id="who-form" class="content-form">
+      <div><label>Intro paragraph</label><textarea id="w-intro" rows="3"></textarea></div>
+      <div class="field-row"><div><label>Pillar 1 title</label><input id="w-p1t"></div><div><label>Pillar 1 description</label><input id="w-p1d"></div></div>
+      <div class="field-row"><div><label>Pillar 2 title</label><input id="w-p2t"></div><div><label>Pillar 2 description</label><input id="w-p2d"></div></div>
+      <div class="field-row"><div><label>Pillar 3 title</label><input id="w-p3t"></div><div><label>Pillar 3 description</label><input id="w-p3d"></div></div>
+      <div class="field-row"><div><label>Pillar 4 title</label><input id="w-p4t"></div><div><label>Pillar 4 description</label><input id="w-p4d"></div></div>
+      <div><label>"Transforming Lives" heading</label><input id="w-tt"></div>
+      <div><label>"Transforming Lives" paragraph</label><textarea id="w-tx" rows="3"></textarea></div>
+      <button type="submit" class="btn-export" style="justify-self:flex-start; width:fit-content;">Save Who We Are</button>
+      <p class="save-msg" id="who-msg"></p>
+    </form>
+  </section>
+
+  <section class="panel">
+    <h3>About (Vision, Mission, Values, Objectives)</h3>
+    <form id="about-form" class="content-form">
+      <div><label>Our Vision</label><textarea id="a-vision" rows="2"></textarea></div>
+      <div><label>Our Mission</label><textarea id="a-mission" rows="2"></textarea></div>
+      <div><label>Core Values (comma-separated)</label><input id="a-values"></div>
+      <div><label>Objectives (comma-separated)</label><input id="a-objectives"></div>
+      <button type="submit" class="btn-export" style="justify-self:flex-start; width:fit-content;">Save About</button>
+      <p class="save-msg" id="about-msg"></p>
+    </form>
+  </section>
+
+  <section class="panel">
+    <h3>Get Involved</h3>
+    <form id="involved-form" class="content-form">
+      <div><label>Intro paragraph</label><textarea id="g-intro" rows="3"></textarea></div>
+      <div><label>"Join Our Journey" heading</label><input id="g-title"></div>
+      <div><label>"Join Our Journey" paragraph</label><textarea id="g-text" rows="3"></textarea></div>
+      <button type="submit" class="btn-export" style="justify-self:flex-start; width:fit-content;">Save Get Involved</button>
+      <p class="save-msg" id="involved-msg"></p>
+    </form>
+  </section>
+
+</main>
+
+<script src="admin-common.js"></script>
+<script src="content.js"></script>
+</body>
+</html>

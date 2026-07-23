@@ -3,7 +3,7 @@ const crypto = require('crypto');
 const Donation = require('../models/Donation');
 
 /**
- * STEP 1 (frontend calls this first)
+ * STEP 1 (only used if you have a custom donation form on your site)
  * Generates a unique transaction reference before opening the Paystack
  * payment popup, and saves a "pending" donation record.
  */
@@ -39,9 +39,7 @@ const initiateDonation = async (req, res) => {
 };
 
 /**
- * STEP 2 (frontend calls this after the Paystack popup reports success)
- * NEVER trust the frontend alone - we re-check directly with Paystack's
- * servers using our secret key before marking a donation as successful.
+ * STEP 2 (only used alongside the custom form above)
  */
 const verifyDonation = async (req, res) => {
   try {
@@ -63,14 +61,13 @@ const verifyDonation = async (req, res) => {
       return res.status(404).json({ message: 'Donation record not found.' });
     }
 
-    // Paystack amounts are in the smallest currency unit (KES cents), hence * 100
     const isGenuine =
       data.status === 'success' &&
       data.reference === txRef &&
       data.amount >= donation.amount * 100 &&
       data.currency === 'KES';
 
-    donation.flwTransactionId = String(data.id); // Paystack's transaction id
+    donation.flwTransactionId = String(data.id);
     donation.status = isGenuine ? 'successful' : 'failed';
     await donation.save();
 
@@ -87,8 +84,8 @@ const verifyDonation = async (req, res) => {
 
 /**
  * WEBHOOK (Paystack calls this directly from their servers)
- * Safety net in case the donor closes their browser right after paying,
- * before step 2 above gets a chance to run.
+ * This is now the MAIN way donations get logged, since donations happen on
+ * Paystack's own hosted page (paystack.shop) rather than a form on our site.
  * Set this URL in Paystack Dashboard -> Settings -> API Keys & Webhooks:
  *   https://YOUR-BACKEND-URL/api/donations/webhook
  */
@@ -107,12 +104,44 @@ const paystackWebhook = async (req, res) => {
     const event = req.body;
 
     if (event.event === 'charge.success') {
-      const txRef = event.data.reference;
-      const donation = await Donation.findOne({ txRef });
-      if (donation && donation.status !== 'successful') {
-        donation.status = 'successful';
-        donation.flwTransactionId = String(event.data.id);
-        await donation.save();
+      const data = event.data;
+      const txRef = data.reference;
+
+      let donation = await Donation.findOne({ txRef });
+
+      if (donation) {
+        // A donation we already had a pending record for (custom form flow, if used)
+        if (donation.status !== 'successful') {
+          donation.status = 'successful';
+          donation.flwTransactionId = String(data.id);
+          await donation.save();
+        }
+      } else {
+        // No existing record - this donation came straight from the Paystack
+        // hosted payment page, so we create the record directly from the webhook.
+        const channelMap = {
+          mobile_money: 'mpesa',
+          card: 'card',
+          bank: 'bank_transfer',
+          bank_transfer: 'bank_transfer',
+          eft: 'bank_transfer'
+        };
+
+        // Paystack's hosted page doesn't collect a name field by default,
+        // so donors who don't add one via custom fields show as "Anonymous Donor".
+        const customName = data.metadata?.custom_fields?.find(
+          (f) => /name/i.test(f.variable_name || f.display_name || '')
+        )?.value;
+
+        await Donation.create({
+          donorName: customName || 'Anonymous Donor',
+          donorEmail: data.customer?.email || '',
+          amount: data.amount / 100, // Paystack sends amount in cents
+          paymentMethod: channelMap[data.channel] || 'other',
+          txRef,
+          flwTransactionId: String(data.id),
+          status: 'successful'
+        });
       }
     }
 

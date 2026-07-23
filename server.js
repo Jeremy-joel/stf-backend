@@ -11,6 +11,7 @@ const programRoutes = require('./routes/programRoutes');
 const impactRoutes = require('./routes/impactRoutes');
 const galleryRoutes = require('./routes/galleryRoutes');
 const contactRoutes = require('./routes/contactRoutes');
+const contentRoutes = require('./routes/contentRoutes');
 
 const app = express();
 
@@ -34,6 +35,7 @@ const start = async () => {
   app.use('/api/impact', impactRoutes);
   app.use('/api/gallery', galleryRoutes);
   app.use('/api/contact', contactRoutes);
+  app.use('/api/content', contentRoutes);
 
   // Serves the admin dashboard as plain static files
   app.use('/admin', express.static(path.join(__dirname, 'public/admin')));
