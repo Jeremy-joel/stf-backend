@@ -36,6 +36,9 @@ const start = async () => {
   app.use('/api/gallery', galleryRoutes);
   app.use('/api/contact', contactRoutes);
   app.use('/api/content', contentRoutes);
+  const teamRoutes = require('./routes/teamRoutes');
+// ...
+app.use('/api/team', teamRoutes);
 
   // Serves the admin dashboard as plain static files
   app.use('/admin', express.static(path.join(__dirname, 'public/admin')));

@@ -25,6 +25,7 @@
     <a href="programs.html">Programs</a>
     <a href="gallery.html">Gallery</a>
     <a href="impact.html">Impact</a>
+    <a href="team.html">Team</a>
     <a href="content.html" class="active">Page Content</a>
     <a href="messages.html">Messages</a>
   </nav>
@@ -37,8 +38,56 @@
 <main class="admin-main">
 
   <section class="panel">
+    <h3>Site Logo</h3>
+    <p style="color:var(--color-text-soft); font-size:0.85rem;">Appears in your header navigation.</p>
+    <div class="image-upload-row">
+      <img id="logo-preview" class="image-preview" style="display:none;">
+      <input type="file" id="logo-file" accept="image/*">
+      <button id="logo-upload-btn" class="btn-export">Upload Logo</button>
+    </div>
+    <p class="save-msg" id="logo-msg"></p>
+  </section>
+
+  <section class="panel">
+    <h3>Hero Section (top of homepage)</h3>
+    <form id="hero-form" class="content-form">
+      <div><label>Main heading</label><textarea id="h-title" rows="2"></textarea></div>
+      <div><label>Subtitle</label><textarea id="h-subtitle" rows="3"></textarea></div>
+      <button type="submit" class="btn-export" style="justify-self:flex-start; width:fit-content;">Save Hero Text</button>
+      <p class="save-msg" id="hero-msg"></p>
+    </form>
+    <div class="image-upload-row" style="margin-top:14px;">
+      <img id="hero-preview" class="image-preview" style="display:none;">
+      <input type="file" id="hero-file" accept="image/*">
+      <button id="hero-upload-btn" class="btn-export">Upload Hero Photo</button>
+    </div>
+    <p class="save-msg" id="hero-img-msg"></p>
+  </section>
+
+  <section class="panel">
     <h3>Who We Are</h3>
     <p style="color:var(--color-text-soft); font-size:0.85rem;">The intro paragraph, the 4 focus pillars, and the "Transforming Lives" text on your homepage.</p>
+
+    <div class="field-row" style="margin-bottom:16px;">
+      <div>
+        <label>"Who We Are" photo</label>
+        <div class="image-upload-row">
+          <img id="who-img-preview" class="image-preview" style="display:none;">
+          <input type="file" id="who-img-file" accept="image/*">
+          <button id="who-img-upload-btn" type="button" class="btn-export">Upload</button>
+        </div>
+      </div>
+      <div>
+        <label>"Transforming Lives" photo</label>
+        <div class="image-upload-row">
+          <img id="transforming-img-preview" class="image-preview" style="display:none;">
+          <input type="file" id="transforming-img-file" accept="image/*">
+          <button id="transforming-img-upload-btn" type="button" class="btn-export">Upload</button>
+        </div>
+      </div>
+    </div>
+    <p class="save-msg" id="who-img-msg"></p>
+
     <form id="who-form" class="content-form">
       <div><label>Intro paragraph</label><textarea id="w-intro" rows="3"></textarea></div>
       <div class="field-row"><div><label>Pillar 1 title</label><input id="w-p1t"></div><div><label>Pillar 1 description</label><input id="w-p1d"></div></div>

@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Team | Save the Family Foundation Admin</title>
+<link rel="stylesheet" href="admin.css">
+</head>
+<body>
+
+<header class="admin-header">
+  <span class="admin-logo">Save the Family Foundation <strong>Admin</strong></span>
+  <nav class="admin-nav-links">
+    <a href="dashboard.html">Donations</a>
+    <a href="programs.html">Programs</a>
+    <a href="gallery.html">Gallery</a>
+    <a href="impact.html">Impact</a>
+    <a href="team.html" class="active">Team</a>
+    <a href="content.html">Page Content</a>
+    <a href="messages.html">Messages</a>
+  </nav>
+  <div class="admin-header-right">
+    <span id="admin-username"></span>
+    <button id="logout-btn" class="btn-logout">Log Out</button>
+  </div>
+</header>
+
+<main class="admin-main">
+
+  <section class="panel">
+    <h3 id="form-title">Add a Team Member</h3>
+    <form id="team-form" class="manual-form" enctype="multipart/form-data">
+      <input type="hidden" id="t-id">
+      <input type="text" id="t-name" placeholder="Full name" required>
+      <input type="text" id="t-position" placeholder="Position / role" required>
+      <input type="number" id="t-order" placeholder="Display order (0 = first)" value="0">
+      <input type="email" id="t-email" placeholder="Email (optional)">
+      <input type="text" id="t-phone" placeholder="Phone (optional)">
+      <select id="t-published">
+        <option value="true">Published</option>
+        <option value="false">Hidden</option>
+      </select>
+      <textarea id="t-bio" placeholder="Short bio (optional)" style="grid-column: span 3; padding:10px 12px; border:1px solid var(--color-line); border-radius:8px;"></textarea>
+      <div class="image-upload-row" style="grid-column: span 3;">
+        <input type="file" id="t-photo" accept="image/*">
+        <img id="t-preview" class="image-preview" style="display:none;">
+      </div>
+      <button type="submit" id="t-submit-btn">Add Team Member</button>
+    </form>
+    <button id="t-cancel-edit" style="display:none; margin-top:10px; background:none; border:none; color:var(--color-rust); cursor:pointer;">Cancel editing</button>
+  </section>
+
+  <section class="panel">
+    <h3>Team Members</h3>
+    <div class="card-grid" id="team-grid"></div>
+  </section>
+
+</main>
+
+<script src="admin-common.js"></script>
+<script src="team.js"></script>
+</body>
+</html>

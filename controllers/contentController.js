@@ -4,6 +4,14 @@ const SiteContent = require('../models/SiteContent');
 // matches exactly what's currently hardcoded on the live site, so nothing
 // changes visually until an admin actually edits something.
 const DEFAULTS = {
+  'site-settings': {
+    logoUrl: ''
+  },
+  'hero': {
+    title: 'Restoring Hope. Strengthening Families. Transforming Lives.',
+    subtitle: 'We support vulnerable children and families across Kenya through education, healthcare, food assistance, empowerment and community development. Together, we can build stronger families and brighter futures.',
+    imageUrl: ''
+  },
   'who-we-are': {
     intro: 'Save the Family Foundation is a non-profit organization founded in 2016, committed to restoring hope and transforming the lives of vulnerable children and families across Kenya. Our work focuses on four pillars:',
     pillar1Title: 'Safety & Protection',
@@ -15,7 +23,9 @@ const DEFAULTS = {
     pillar4Title: 'Basic Needs',
     pillar4Desc: 'Access to quality education and essential daily needs.',
     transformingTitle: 'Transforming Lives, Strengthening Families',
-    transformingText: 'Save the Family Foundation supports vulnerable and street-connected children in Kenya with education, meals, and family care — helping them grow in safety, dignity, and hope through community-driven, long-term support.'
+    transformingText: 'Save the Family Foundation supports vulnerable and street-connected children in Kenya with education, meals, and family care — helping them grow in safety, dignity, and hope through community-driven, long-term support.',
+    whoImage: '',
+    transformingImage: ''
   },
   'about': {
     vision: 'A compassionate society where children and youths live with dignity, love and equal opportunities — regardless of their background.',
@@ -67,4 +77,31 @@ const updateContent = async (req, res) => {
   }
 };
 
-module.exports = { getContent, getContentAdmin, updateContent };
+// ADMIN - upload/replace a single image within a content section.
+// `field` in the form data says WHICH image this is (e.g. "logoUrl",
+// "whoImage", "transformingImage") - this lets one section (like "who-we-are")
+// hold more than one image.
+const updateContentImage = async (req, res) => {
+  try {
+    const { key } = req.params;
+    const { field } = req.body;
+
+    if (!req.file) return res.status(400).json({ message: 'No image uploaded.' });
+    if (!field) return res.status(400).json({ message: 'Missing "field" - which image is this?' });
+
+    const existing = await SiteContent.findOne({ key });
+    const data = { ...(existing ? existing.data : DEFAULTS[key] || {}), [field]: req.file.path };
+
+    const record = await SiteContent.findOneAndUpdate(
+      { key },
+      { key, data },
+      { upsert: true, new: true }
+    );
+    res.json(record);
+  } catch (err) {
+    console.error('updateContentImage error:', err.message);
+    res.status(500).json({ message: 'Could not upload image.' });
+  }
+};
+
+module.exports = { getContent, getContentAdmin, updateContent, updateContentImage };

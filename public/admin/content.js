@@ -5,7 +5,114 @@ function showMsg(id, text, ok) {
   setTimeout(() => { el.textContent = ''; }, 3000);
 }
 
-/* ---------- Who We Are ---------- */
+// Generic helper for uploading a single image into a content section.
+// `key` = which section (e.g. "site-settings", "hero", "who-we-are")
+// `field` = which image within that section (e.g. "logoUrl", "imageUrl", "whoImage")
+async function uploadContentImage(key, field, fileInputId, msgId) {
+  const fileInput = document.getElementById(fileInputId);
+  const file = fileInput.files[0];
+  if (!file) { showMsg(msgId, 'Choose a photo first.', false); return; }
+
+  const formData = new FormData();
+  formData.append('image', file);
+  formData.append('field', field);
+
+  const res = await authFetch(`/api/content/admin/${key}/image`, { method: 'PUT', body: formData });
+  if (res.ok) {
+    showMsg(msgId, 'Photo uploaded!', true);
+    fileInput.value = '';
+  } else {
+    const data = await res.json();
+    showMsg(msgId, data.message || 'Upload failed.', false);
+  }
+}
+
+/* ---------- Logo ---------- */
+async function loadLogo() {
+  const res = await authFetch('/api/content/admin/site-settings');
+  const d = await res.json();
+  if (d.logoUrl) {
+    document.getElementById('logo-preview').src = d.logoUrl;
+    document.getElementById('logo-preview').style.display = 'block';
+  }
+}
+document.getElementById('logo-file').addEventListener('change', (e) => {
+  if (e.target.files[0]) {
+    const preview = document.getElementById('logo-preview');
+    preview.src = URL.createObjectURL(e.target.files[0]);
+    preview.style.display = 'block';
+  }
+});
+document.getElementById('logo-upload-btn').addEventListener('click', () => {
+  uploadContentImage('site-settings', 'logoUrl', 'logo-file', 'logo-msg');
+});
+
+/* ---------- Hero ---------- */
+async function loadHero() {
+  const res = await authFetch('/api/content/admin/hero');
+  const d = await res.json();
+  document.getElementById('h-title').value = d.title || '';
+  document.getElementById('h-subtitle').value = d.subtitle || '';
+  if (d.imageUrl) {
+    document.getElementById('hero-preview').src = d.imageUrl;
+    document.getElementById('hero-preview').style.display = 'block';
+  }
+}
+document.getElementById('hero-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const body = {
+    title: document.getElementById('h-title').value,
+    subtitle: document.getElementById('h-subtitle').value
+  };
+  const res = await authFetch('/api/content/admin/hero', { method: 'PUT', body: JSON.stringify(body) });
+  showMsg('hero-msg', res.ok ? 'Saved!' : 'Could not save.', res.ok);
+});
+document.getElementById('hero-file').addEventListener('change', (e) => {
+  if (e.target.files[0]) {
+    const preview = document.getElementById('hero-preview');
+    preview.src = URL.createObjectURL(e.target.files[0]);
+    preview.style.display = 'block';
+  }
+});
+document.getElementById('hero-upload-btn').addEventListener('click', () => {
+  uploadContentImage('hero', 'imageUrl', 'hero-file', 'hero-img-msg');
+});
+
+/* ---------- Who We Are images ---------- */
+document.getElementById('who-img-file').addEventListener('change', (e) => {
+  if (e.target.files[0]) {
+    const preview = document.getElementById('who-img-preview');
+    preview.src = URL.createObjectURL(e.target.files[0]);
+    preview.style.display = 'block';
+  }
+});
+document.getElementById('who-img-upload-btn').addEventListener('click', () => {
+  uploadContentImage('who-we-are', 'whoImage', 'who-img-file', 'who-img-msg');
+});
+document.getElementById('transforming-img-file').addEventListener('change', (e) => {
+  if (e.target.files[0]) {
+    const preview = document.getElementById('transforming-img-preview');
+    preview.src = URL.createObjectURL(e.target.files[0]);
+    preview.style.display = 'block';
+  }
+});
+document.getElementById('transforming-img-upload-btn').addEventListener('click', () => {
+  uploadContentImage('who-we-are', 'transformingImage', 'transforming-img-file', 'who-img-msg');
+});
+async function loadWhoImages() {
+  const res = await authFetch('/api/content/admin/who-we-are');
+  const d = await res.json();
+  if (d.whoImage) {
+    document.getElementById('who-img-preview').src = d.whoImage;
+    document.getElementById('who-img-preview').style.display = 'block';
+  }
+  if (d.transformingImage) {
+    document.getElementById('transforming-img-preview').src = d.transformingImage;
+    document.getElementById('transforming-img-preview').style.display = 'block';
+  }
+}
+
+/* ---------- Who We Are (text) ---------- */
 async function loadWho() {
   const res = await authFetch('/api/content/admin/who-we-are');
   const d = await res.json();
@@ -83,6 +190,9 @@ document.getElementById('involved-form').addEventListener('submit', async (e) =>
   showMsg('involved-msg', res.ok ? 'Saved!' : 'Could not save.', res.ok);
 });
 
+loadLogo();
+loadHero();
+loadWhoImages();
 loadWho();
 loadAbout();
 loadInvolved();
