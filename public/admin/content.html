@@ -39,7 +39,7 @@
 
   <section class="panel">
     <h3>Site Logo</h3>
-    <p style="color:var(--color-text-soft); font-size:0.85rem;">Appears in your header navigation.</p>
+    <p style="color:var(--color-text-soft); font-size:0.85rem;">Appears in your header navigation on every page.</p>
     <div class="image-upload-row">
       <img id="logo-preview" class="image-preview" style="display:none;">
       <input type="file" id="logo-file" accept="image/*">
@@ -66,7 +66,7 @@
 
   <section class="panel">
     <h3>Who We Are</h3>
-    <p style="color:var(--color-text-soft); font-size:0.85rem;">The intro paragraph, the 4 focus pillars, and the "Transforming Lives" text on your homepage.</p>
+    <p style="color:var(--color-text-soft); font-size:0.85rem;">The intro paragraph, the 4 focus pillars, and the "Transforming Lives" text.</p>
 
     <div class="field-row" style="margin-bottom:16px;">
       <div>
@@ -121,6 +121,23 @@
       <div><label>"Join Our Journey" paragraph</label><textarea id="g-text" rows="3"></textarea></div>
       <button type="submit" class="btn-export" style="justify-self:flex-start; width:fit-content;">Save Get Involved</button>
       <p class="save-msg" id="involved-msg"></p>
+    </form>
+  </section>
+
+  <section class="panel">
+    <h3>Donate / Bank Details</h3>
+    <p style="color:var(--color-text-soft); font-size:0.85rem;">The bank transfer details shown on your Donate page (Bank Name, Account Name, Account Number, SWIFT Code).</p>
+    <form id="donate-form" class="content-form">
+      <div class="field-row">
+        <div><label>Bank Name</label><input id="d-bank-name"></div>
+        <div><label>Account Name</label><input id="d-account-name"></div>
+      </div>
+      <div class="field-row">
+        <div><label>Account Number</label><input id="d-account-number"></div>
+        <div><label>SWIFT Code</label><input id="d-swift-code"></div>
+      </div>
+      <button type="submit" class="btn-export" style="justify-self:flex-start; width:fit-content;">Save Bank Details</button>
+      <p class="save-msg" id="donate-msg"></p>
     </form>
   </section>
 

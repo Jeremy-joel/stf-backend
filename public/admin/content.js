@@ -6,8 +6,6 @@ function showMsg(id, text, ok) {
 }
 
 // Generic helper for uploading a single image into a content section.
-// `key` = which section (e.g. "site-settings", "hero", "who-we-are")
-// `field` = which image within that section (e.g. "logoUrl", "imageUrl", "whoImage")
 async function uploadContentImage(key, field, fileInputId, msgId) {
   const fileInput = document.getElementById(fileInputId);
   const file = fileInput.files[0];
@@ -190,9 +188,32 @@ document.getElementById('involved-form').addEventListener('submit', async (e) =>
   showMsg('involved-msg', res.ok ? 'Saved!' : 'Could not save.', res.ok);
 });
 
+/* ---------- Donate / Bank Details ---------- */
+async function loadDonate() {
+  const res = await authFetch('/api/content/admin/donate');
+  const d = await res.json();
+  document.getElementById('d-bank-name').value = d.bankName || '';
+  document.getElementById('d-account-name').value = d.accountName || '';
+  document.getElementById('d-account-number').value = d.accountNumber || '';
+  document.getElementById('d-swift-code').value = d.swiftCode || '';
+}
+
+document.getElementById('donate-form').addEventListener('submit', async (e) => {
+  e.preventDefault();
+  const body = {
+    bankName: document.getElementById('d-bank-name').value,
+    accountName: document.getElementById('d-account-name').value,
+    accountNumber: document.getElementById('d-account-number').value,
+    swiftCode: document.getElementById('d-swift-code').value
+  };
+  const res = await authFetch('/api/content/admin/donate', { method: 'PUT', body: JSON.stringify(body) });
+  showMsg('donate-msg', res.ok ? 'Saved!' : 'Could not save.', res.ok);
+});
+
 loadLogo();
 loadHero();
 loadWhoImages();
 loadWho();
 loadAbout();
 loadInvolved();
+loadDonate();

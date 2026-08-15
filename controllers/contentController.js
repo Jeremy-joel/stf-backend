@@ -37,6 +37,12 @@ const DEFAULTS = {
     intro: "Your support can change lives. Whether you choose to donate, volunteer, partner with us or share our mission, your support brings hope, opportunity, and lasting change to vulnerable children.",
     journeyTitle: 'Help Us Reach 200+ Children in Mumias',
     journeyText: "Our goal is to reach more than 200 children within Mumias in a year — providing them with a safe environment, food, education, mentorship, and medical and psychosocial support. You are welcome to participate in turning the streets into a launching pad of hope, and help reduce the ever-increasing number of idle and displaced children in the streets."
+  },
+  'donate': {
+    bankName: 'KCB Kenya',
+    accountName: 'SAVE THE FAMILY FOUNDATION',
+    accountNumber: '1269023918',
+    swiftCode: 'KCBLKENX'
   }
 };
 
